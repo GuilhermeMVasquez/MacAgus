@@ -4,11 +4,13 @@ public class Combo implements IProduct {
     private int id;
     private String name;
     private List<IProduct> products;
+    private IDiscount discount;
 
-    public Combo(int id, String name, List<IProduct> products) {
+    public Combo(int id, String name, List<IProduct> products, IDiscount discount) {
         this.id = id;
         this.name = name;
         this.products = products;
+        this.discount = discount;
     }
 
     @Override
@@ -23,8 +25,9 @@ public class Combo implements IProduct {
 
     @Override
     public double getPrice() {
-        return products.stream()
-                       .mapToDouble(product -> product.getPrice())
-                       .sum() * 0.9;
+        return discount.applyDiscount(
+                products.stream()
+                        .mapToDouble(product -> product.getPrice())
+                        .sum());
     }
 }
